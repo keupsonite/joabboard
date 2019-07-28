@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New OfferCategory{% endblock %}
+
+{% block body %}
+    <h1>Create new OfferCategory</h1>
+
+    {{ include('offer_category/_form.html.twig') }}
+
+    <a href="{{ path('offer_category_index') }}">back to list</a>
+{% endblock %}

@@ -10,12 +10,13 @@ services:
     _defaults:
         autowire: true      # Automatically injects dependencies in your services.
         autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+        #public: true
 
     # makes classes in src/ available to be used as services
     # this creates a service per class whose id is the fully-qualified class name
     App\:
         resource: '../src/*'
-        exclude: '../src/{DependencyInjection,Entity,Migrations,Tests,Kernel.php}'
+        exclude: '../src/{DependencyInjection,Migrations,Tests,Kernel.php}'
 
     # controllers are imported separately to make sure services can be injected
     # as action arguments even if you don't extend any base controller class
@@ -23,5 +24,32 @@ services:
         resource: '../src/Controller'
         tags: ['controller.service_arguments']
 
-    # add more service definitions when explicit configuration is needed
-    # please note that last definitions always *replace* previous ones
+    App\Service\OffersQueryService:
+        public: true
+        arguments:
+          - '@request_stack'
+          - '@App\Repository\OfferRepository'
+          - '@security.helper'
+          - '@security.authorization_checker'
+
+    App\EventSubscriber\OfferApplianceSubscriber:
+        arguments:
+          - '@swiftmailer.mailer.default'
+          - '@twig'
+          - '%env(MAILER_SENDER_OFFER_APPLIANCE)%'
+        tags:
+            - { name: kernel.event_subscriber }
+
+    App\EventSubscriber\OfferEditionSubscriber:
+        arguments: ['@doctrine.orm.entity_manager']
+        tags:
+            - { name: kernel.event_subscriber }
+
+    App\Twig\AppExtension:
+        tags:
+            - { name: twig.extension }
+
+    App\Twig\AppRuntime:
+        arguments: ['@request_stack']
+        tags:
+            - { name: twig.runtime }

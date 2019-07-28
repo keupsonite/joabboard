@@ -1,0 +1,80 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Log in!{% endblock %}
+
+{% block body %}
+<style>
+    button, input {
+        margin: 10px 0;
+    }
+    .login_credentials_tests {
+        margin: 10px 0;
+    }
+    .login_credentials_tests > div {
+        display: inline-grid;
+        margin: 0 10px 0 0;
+    }
+    .login_credentials_tests > div:last-child {
+        margin-bottom: 0;
+    }
+</style>
+
+<form method="post">
+    {% if error %}
+        <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+    {% endif %}
+
+    {% if app.user %}
+        <div class="checkbox mb-3">You are logged in as {{ app.user.username }}, <a href="{{ path('app_logout') }}">Logout</a></div>
+    {% endif %}
+
+    <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
+    <label for="inputEmail" class="sr-only">Email</label>
+    <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control" placeholder="Email" required autofocus>
+    <label for="inputPassword" class="sr-only">Password</label>
+    <input type="password" name="password" id="inputPassword" class="form-control" placeholder="Password" required>
+
+    <input type="hidden" name="_csrf_token"
+           value="{{ csrf_token('authenticate') }}"
+    >
+
+    {#
+        Uncomment this section and add a remember_me option below your firewall to activate remember me functionality.
+        See https://symfony.com/doc/current/security/remember_me.html
+
+        <div class="checkbox mb-3">
+            <label>
+                <input type="checkbox" name="_remember_me"> Remember me
+            </label>
+        </div>
+    #}
+
+    <button class="btn btn-lg btn-primary" type="submit">
+        Sign in
+    </button>
+
+    <div class="login_credentials_tests">
+        <h3>Identifiant de tests</h3>
+
+        <div>
+            <strong>Profil ROLE_ADMIN</strong><br/>
+            root@joabboard.com
+            123
+        </div>
+
+        <div>
+            <strong>Profil ROLE_RECRUITER</strong><br/>
+            recruiter@joabboard.com
+            123<br/>
+            recruiter2@joabboard.com
+            123
+        </div>
+
+        <div>
+            <strong>Profil ROLE_CANDIDATE</strong><br/>
+            candidate@joabboard.com
+            123<br/>
+        </div>
+    </div>
+</form>
+{% endblock %}

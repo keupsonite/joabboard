@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}OfferCategory index{% endblock %}
+
+{% block body %}
+    <h1>OfferCategory index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for offer_category in offer_categories %}
+            <tr>
+                <td>{{ offer_category.id }}</td>
+                <td>{{ offer_category.name }}</td>
+                <td>
+                    <a href="{{ path('offer_category_show', {'id': offer_category.id}) }}">show</a>
+                    <a href="{{ path('offer_category_edit', {'id': offer_category.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="3">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('offer_category_new') }}">Create new</a>
+{% endblock %}

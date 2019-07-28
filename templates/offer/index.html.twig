@@ -1,0 +1,107 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Offer index{% endblock %}
+
+{% block body %}
+    <h1>Offer index</h1>
+
+    <table class="table">
+        <form method="get" action="{{ path('offer_index') }}">
+            {% set FILTER_SANITIZE_STRING = 513 %}
+
+            {% if app.request.query.has('sort') %}
+                <input type="hidden" name="sort" value="{{ app.request.query.filter('sort', '', FILTER_SANITIZE_STRING) }}"/>
+            {% endif %}
+
+            {% if app.request.query.has('direction') %}
+                <input type="hidden" name="direction" value="{{ app.request.query.filter('direction', '', FILTER_SANITIZE_STRING) }}"/>
+            {% endif %}
+
+            {% if app.request.query.has('page') %}
+                <input type="hidden" name="page" value="{{ app.request.query.getInt('page') }}"/>
+            {% endif %}
+            <thead>
+            <tr>
+                <th>
+                    {{ knp_pagination_sortable(offers, 'Id', offer_alias ~ '.id') }}
+                </th>
+
+                <th>
+                    {{ knp_pagination_sortable(offers, 'Author', user_alias ~ '.email') }}
+                </th>
+
+                <th>
+                    <label for="offer_input_input">
+                        {{ knp_pagination_sortable(offers, 'Type', offer_type_alias ~ '.name') }}
+                    </label>
+
+                    <input id="offer_input_input" type="text" name="type" value="{{ app.request.query.filter('type', '', FILTER_SANITIZE_STRING) }}"/>
+                    <button type="submit" class="btn btn-default btn-sm">Filter Now</button>
+                </th>
+
+                <th>
+                    {{ knp_pagination_sortable(offers, 'Position', offer_alias ~ '.position') }}
+                </th>
+
+                <th>
+                    <label for="offer_category_input">
+                        {{ knp_pagination_sortable(offers, 'Category', offer_category_alias ~ '.name') }}
+                    </label>
+
+                    <input id="offer_category_input" type="text" name="category"
+                           value="{{ app.request.query.get('category') }}"/>
+                    <button type="submit" class="btn btn-default btn-sm">Filter Now</button>
+                </th>
+
+                <th>
+                    {{ knp_pagination_sortable(offers, 'Published', offer_alias ~ '.status') }}
+                </th>
+
+                <th>actions</th>
+            </tr>
+            </thead>
+        </form>
+        <tbody>
+        {% for offer in offers %}
+            <tr>
+                <td>
+                    {{ offer.id }}
+                </td>
+                <td>{{ offer.author.email }}</td>
+                <td>{{ offer.type.name }}</td>
+                <td>{{ offer.position }}</td>
+                <td>{{ offer.category.name }}</td>
+                <td>{{ offer.status ? 'Yes' : 'No' }}</td>
+                <td>
+                    <a href="{{ path('offer_show', {'id': offer.id}) }}">show</a>
+
+                    {% if is_granted('edit', offer) %}
+                        <a href="{{ path('offer_edit', {'id': offer.id}) }}">edit</a>
+                    {% endif %}
+
+                    {% if is_granted('ROLE_ADMIN') %}
+                        <br/>
+                        {{ include('offer/_delete_form.html.twig') }}
+                    {% endif %}
+
+                    {% if is_granted('apply', offer) %}
+                        <a href="{{ path('offer_apply', {'id': offer.id}) }}">apply</a>
+                    {% endif %}
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="5">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    {% if is_granted('ROLE_RECRUITER') %}
+        <a href="{{ path('offer_new') }}">Create new</a>
+    {% endif %}
+
+    <div class="navigation">
+        {{ knp_pagination_render(offers) }}
+    </div>
+{% endblock %}
