@@ -46,7 +46,7 @@ class UserFixtures extends Fixture
             [
                 '_reference' => self::RECRUITER_REFERENCE,
                 'email' => 'recruiter@joabboard.com',
-                'password' => 'password',
+                'password' => '123',
                 'roles' => [
                     'ROLE_RECRUITER',
                 ],
@@ -54,7 +54,7 @@ class UserFixtures extends Fixture
             [
                 '_reference' => self::RECRUITER2_REFERENCE,
                 'email' => 'recruiter2@joabboard.com',
-                'password' => 'password',
+                'password' => '123',
                 'roles' => [
                     'ROLE_RECRUITER',
                 ],
@@ -62,7 +62,7 @@ class UserFixtures extends Fixture
             [
                 '_reference' => self::CANDIDATE_REFERENCE,
                 'email' => 'candidate@joabboard.com',
-                'password' => 'password',
+                'password' => '123',
                 'roles' => [
                     'ROLE_CANDIDATE',
                 ],
